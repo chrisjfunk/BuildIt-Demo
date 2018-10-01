@@ -11,13 +11,13 @@ when ready to run the project use the command
 **mvnw spring-boot:run -Dspring-boot.run.arguments=--url=<https://buildit.wiprodigital.com/>,--wait=300,--threads=5**
 
 ### Replace the values above with your  desired parameters
-**--url:**   the starting url you want to crawl.  NOTE you must enter this url in its common form i.e with www. if it usaully displays that way.  Put your url in a browser first the copy and paste the url after the browser follows initial redirects.  See time constraint notes below.
+**--url:**   the starting url you want to crawl.  **NOTE you must enter this url in its common form i.e with www if it usually displays that way.**  Put your url in a browser first and then copy and paste the url after the browser follows initial redirects.  See time constraint notes below.
 
-**--wait:** the max time in seconds you want to wait.  defaults to 300 or 5 minutes if you remove this parameter
+**--wait:** the max time in seconds you want to wait.  Defaults to 300 (5 minutes) if you remove this parameter
 
-**--threads:** the number of threads you want to run in parallel for the crawling.  note:  setting the thread count too high might cause connection timeout errors on http fetches so dont set too high
+**--threads:** the number of threads you want to run in parallel for the crawling.  Defaults to 5  **NOTE setting the thread count too high might cause connection timeout errors on http fetches so dont set too high depending on your bandwidth**
 
-Running this app will crawl your site of choice for up N number of seconds with N number of threads.   the output will be a siteMap.json file in the same directory where it is run with the pages crawled.
+Running this app will crawl your site of choice for up N number of seconds with N number of threads.   the output will be a **siteMap.json** file in the same directory where it is run with the pages crawled.
 If while running you see read timed out errors, reduce the number of threads as it is overwhelming the http connections on your machine.
 
 ## Trade-offs
