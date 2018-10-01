@@ -27,10 +27,10 @@ import static java.lang.System.out;
 @Slf4j
 public class DemoApplication implements CommandLineRunner {
 
-    @Value("${app.wait.seconds:300}")
+    @Value("${app.wait.seconds}")
     private int secondsToWait;
 
-    @Value("${app.wait.seconds:5}")
+    @Value("${app.threads}")
     private int threads;
 
     @Value("${app.url}")
@@ -43,6 +43,7 @@ public class DemoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        out.println("Crawling " + url + " for a max of " + secondsToWait + " seconds using " + threads + " threads...");
         StopWatch stopWatch = new StopWatch("Web Crawler");
         stopWatch.start("Crawling " + url);
         SiteMap siteMap = crawler().apply(new URL(url));

@@ -20,7 +20,7 @@ public class PageLoader implements Function<URL, Optional<Page>> {
                 return Optional.of(new MissingPage(url));
             }
         } catch (Exception e) {
-            log.error("Error Loading Page" + e.getMessage(), e);
+            log.error("Error Loading " + url, e);
         }
         return result;
     }
