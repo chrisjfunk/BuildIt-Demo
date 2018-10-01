@@ -8,7 +8,7 @@ To Build the project including testing from the checkout directory run
 
 when ready to run the project use the command
 
-**mvnw spring-boot:run -Dspring-boot.run.arguments=--url=<https://buildit.wiprodigital.com/>**,--wait=300,--threads=5**
+**mvnw spring-boot:run -Dspring-boot.run.arguments=--url=<https://buildit.wiprodigital.com/>,--wait=300,--threads=5**
 
 ### Replace the values above with your  desired parameters
 **--url:**   the starting url you want to crawl.  NOTE you must enter this url in its common form i.e with www. if it usaully displays that way.  Put your url in a browser first the copy and paste the url after the browser follows initial redirects.  See time constraint notes below.
