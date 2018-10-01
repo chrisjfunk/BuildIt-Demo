@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -24,22 +24,27 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Getter
 @Slf4j
+@RequiredArgsConstructor
 public class PageCrawler implements Function<URL, SiteMap> {
-    private final Scheduler scheduler;
     private final int maxTimeToWaitInSeconds;
     private final Function<URL, Optional<Page>> pageLoader;
     private final ConcurrentHashMap<String, PageWithCount> pageGraph = new ConcurrentHashMap<String, PageWithCount>();
 
-    public PageCrawler(ExecutorService executorService, int maxTimeToWaitInSeconds, Function<URL, Optional<Page>> pageLoader) {
-        this.maxTimeToWaitInSeconds = maxTimeToWaitInSeconds;
-        this.pageLoader = pageLoader;
-        scheduler = new Scheduler(executorService);
-    }
-
     @Override
     public SiteMap apply(URL url) {
+        log.info("Building SiteMap for " + url + " hopefully within " + maxTimeToWaitInSeconds + " seconds.");
         pageGraph.clear();
-        scheduler.schedule(x -> visit(url)).waitForCompletionUpTo(maxTimeToWaitInSeconds, SECONDS);
+        CountDownLatch finished = new CountDownLatch(1);
+        Thread task = new Thread(() -> {
+            visit(url);
+            finished.countDown();
+        });
+        task.run();
+        try {
+            finished.await(maxTimeToWaitInSeconds, SECONDS);
+        } catch (InterruptedException e) {
+            log.info("This site is too big, stopping now to save a few trees.");
+        }
         return new InternalSiteMap(url.getHost(), pageGraph.values());
     }
 
@@ -68,7 +73,7 @@ public class PageCrawler implements Function<URL, SiteMap> {
             throw new IllegalStateException(url);
         }
         if (newCountedPage.getPage().isPresent() && newCountedPage.getPage().get().getInternalLinks() != null) {
-            newCountedPage.getPage().get().getInternalLinks().forEach(l -> scheduler.schedule(x -> visit(l.getUrl())));
+            newCountedPage.getPage().get().getInternalLinks().parallelStream().forEach(l -> visit(l.getUrl()));
         }
         return newCountedPage;
     }

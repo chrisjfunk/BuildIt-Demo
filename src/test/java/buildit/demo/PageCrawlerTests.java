@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.net.URL;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 import static buildit.demo.Util.urlFor;
@@ -14,7 +13,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
 public class PageCrawlerTests {
-    Function<URL, SiteMap> crawler = new PageCrawler(Executors.newCachedThreadPool(), 900, Util::load);
+    Function<URL, SiteMap> crawler = new PageCrawler(30, Util::load);
 
     @Test
     public void itShouldCrawlMultipleInternalPages() throws Exception {
