@@ -28,7 +28,7 @@ to just put a simple time liit on crawling so it just stops after x number of se
 things like pdf, mov links, etc.  These links are followed as though they were html pages and failure is handled gracefully but it could be smarter.
 For example looking at file extension and not following internal *.pdf links.
 
-## Imporovements with more time
+## Improvements with more time
 1. Handle connection timeout better.   Maybe retry or automatically reduce the number of active threads
 
 2. Handle internal non html links more gracefully.    Right now they are just assumed to be broken links (not parseable as html)
